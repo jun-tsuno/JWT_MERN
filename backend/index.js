@@ -20,7 +20,7 @@ app.post('/api/auth/signup', async (req, res) => {
 		email,
 		password,
 	});
-	return res.status(201).json({ message: 'User created!', user });
+	return res.status(201).json({ message: 'User successfully created!', user });
 });
 
 const port = process.env.PORT || 5000;
