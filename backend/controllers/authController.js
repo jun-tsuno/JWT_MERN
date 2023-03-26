@@ -17,7 +17,10 @@ const signup = async (req, res) => {
 		email,
 		password: passwordHash,
 	});
-	return res.status(201).json({ message: 'User successfully created!', user });
+
+	const token = generateToken(user.email);
+
+	return res.status(201).json({ message: 'User successfully created!', token });
 };
 
 const login = async (req, res) => {
@@ -33,7 +36,7 @@ const login = async (req, res) => {
 	}
 
 	const token = generateToken(user.email);
-
+	// Give back token so that the client can access with that token
 	return res.status(200).json({ message: 'Login successfully', token });
 };
 
