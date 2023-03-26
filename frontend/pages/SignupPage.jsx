@@ -1,12 +1,12 @@
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { useAuthContext } from '../context/AuthContext';
 
 const SignupPage = () => {
 	const nameRef = useRef(null);
 	const emailRef = useRef(null);
 	const passwordRef = useRef(null);
-	const { signup } = useAuth();
+	const { signup } = useAuthContext();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
