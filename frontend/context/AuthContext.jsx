@@ -8,11 +8,10 @@ const AuthContext = createContext();
 // context内でlocalstorageからトークンを取得、getUser()にてユーザー情報を取得しstateに入れる。
 
 export const AuthContextProvider = ({ children }) => {
-	const { user, setUser, login, signup, getUser } = useAuth();
+	const { user, setUser, login, signup, getUser, logout } = useAuth();
 
 	useEffect(() => {
 		const token = localStorage.getItem('token');
-		console.log('context!');
 
 		if (token) {
 			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -23,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 	}, [getUser, setUser]);
 
 	return (
-		<AuthContext.Provider value={{ user, login, signup }}>
+		<AuthContext.Provider value={{ user, login, signup, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);

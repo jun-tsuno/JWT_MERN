@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage';
 import SignupPage from '../pages/SignupPage';
 import LoginPage from '../pages/LoginPage';
 import Header from '../components/Header';
+import Profile from '../pages/Profile';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 function App() {
@@ -26,6 +27,14 @@ function App() {
 					/>
 					<Route path='/signup' element={<SignupPage />} />
 					<Route path='/login' element={<LoginPage />} />
+					<Route
+						path='/profile'
+						element={
+							<ProtectedRoute>
+								<Profile />
+							</ProtectedRoute>
+						}
+					/>
 				</Routes>
 			</div>
 		</>

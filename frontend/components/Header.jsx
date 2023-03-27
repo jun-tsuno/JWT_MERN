@@ -3,7 +3,7 @@ import { useAuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
-	const { user } = useAuthContext();
+	const { user, logout } = useAuthContext();
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 			<h1>
@@ -13,6 +13,10 @@ const Header = () => {
 				{user ? (
 					<div>
 						<span>{user.email}</span>
+						<span>
+							<Link to='/profile'>Profile</Link>
+						</span>
+						<button onClick={logout}>Logout</button>
 					</div>
 				) : (
 					<div>

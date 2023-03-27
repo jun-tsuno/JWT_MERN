@@ -8,6 +8,12 @@ const generateToken = (email) => {
 	});
 };
 
+const generateRefreshToken = (email) => {
+	return jwt.sign({ email }, process.env.REFRESH_TOKEN_SECRET_KEY, {
+		expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
+	});
+};
+
 const signup = async (req, res) => {
 	const { name, email, password } = req.body;
 	const salt = await bcrypt.genSalt();
@@ -19,8 +25,11 @@ const signup = async (req, res) => {
 	});
 
 	const token = generateToken(user.email);
+	const refresh_token = generateRefreshToken(user.email);
 
-	return res.status(201).json({ message: 'User successfully created!', token });
+	return res
+		.status(201)
+		.json({ message: 'User successfully created!', token, refresh_token });
 };
 
 const login = async (req, res) => {
@@ -36,8 +45,12 @@ const login = async (req, res) => {
 	}
 
 	const token = generateToken(user.email);
+	const refresh_token = generateRefreshToken(user.email);
+
 	// Give back token so that the client can access with that token
-	return res.status(200).json({ message: 'Login successfully', token });
+	return res
+		.status(200)
+		.json({ message: 'Login successfully', token, refresh_token });
 };
 
 const user = async (req, res) => {
@@ -51,4 +64,24 @@ const user = async (req, res) => {
 	return res.status(200).json({ user });
 };
 
-module.exports = { signup, login, user };
+const refreshToken = async (req, res) => {
+	const { refresh_token } = req.body;
+	console.log('refresh_token', req.body.refresh_token);
+
+	jwt.verify(
+		refresh_token,
+		process.env.REFRESH_TOKEN_SECRET_KEY,
+		(err, decoded) => {
+			if (err) {
+				return res.status(401).json({ message: 'Not a valid token!' });
+			} else {
+				const email = decoded.email;
+				const token = generateToken(email);
+
+				return res.status(200).json({ message: 'Issued new token', token });
+			}
+		}
+	);
+};
+
+module.exports = { signup, login, user, refreshToken };
